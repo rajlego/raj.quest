@@ -4,6 +4,13 @@ A URL shortener / note sharing service, running at [linus.zone](https://linus.zo
 
 ## Setup
 
+### Deploy with Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+Add the password in the config settings under the variable name `PASSWORD`.
+
+### Local deployment
+
 To start `zone`:
 
 1. Make sure you have `npm` installed, and install dependencies with `npm install` or `yarn install`
