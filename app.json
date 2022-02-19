@@ -3,5 +3,10 @@
   "description": "Link shortener and Markdown saver",
   "repository": "https://github.com/l1n/zone",
   "logo": "https://node-js-sample.herokuapp.com/node.png",
-  "keywords": ["node", "static"]
+  "keywords": ["node", "static"],
+  "env": {
+    "PASSWORD": {
+      "description": "global password",
+      "generator": "secret"
+  }
 }
