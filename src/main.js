@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
 const Config = require('../config.js');
 const { StorageBackend, Record } = require('./storage.js');
 
-const GLOBAL_PASSWORD = fs.readFileSync('.env', 'utf8').trim().split('=')[1];
+const GLOBAL_PASSWORD = process.env.PASSWORD;
 
 // create db if not exists
 if (!fs.existsSync(Config.DATABASE)) {
@@ -250,7 +250,7 @@ app.get('/:id/locked', async (req, res) => {
 app.use('/static', express.static('static'));
 
 app.listen(
-    Config.PORT,
-    () => console.log(`Zone service running on :${Config.PORT}`)
+    process.env.PORT,
+    () => console.log(`Zone service running on :${process.env.PORT}`)
 );
 
