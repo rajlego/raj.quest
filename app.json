@@ -6,8 +6,7 @@
   "keywords": ["node", "static"],
   "env": {
     "PASSWORD": {
-      "description": "global password",
-      "generator": "secret"
+      "description": "global password"
     }
   }
 }
