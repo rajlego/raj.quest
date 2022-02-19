@@ -7,7 +7,8 @@ A URL shortener / note sharing service, running at [linus.zone](https://linus.zo
 ### Deploy with Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-Add the password in the config settings under the variable name `PASSWORD`.
+
+Get the password from settings under configuration (randomly generated).
 
 ### Local deployment
 
