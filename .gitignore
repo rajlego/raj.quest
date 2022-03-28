@@ -66,3 +66,6 @@ typings/
 # database folder for linus.zone
 db/
 
+
+# Local Netlify folder
+.netlify
