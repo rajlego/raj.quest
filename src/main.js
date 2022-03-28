@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
 const Config = require('../config.js');
 const { StorageBackend, Record } = require('./storage.js');
 
-const GLOBAL_PASSWORD = process.env.PASSWORD;
+const GLOBAL_PASSWORD = '77af778b51abd4a3c51c5ddd97204a9c3ae614ebccb75a606c3b6865aed6744e';
 
 // create db if not exists
 if (!fs.existsSync(Config.DATABASE)) {
