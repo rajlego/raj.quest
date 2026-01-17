@@ -1,0 +1,2 @@
+# This folder holds static assets for the Cloudflare Worker
+# Currently empty as HTML is rendered inline in the handlers

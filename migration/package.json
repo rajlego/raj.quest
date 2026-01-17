@@ -1,0 +1,14 @@
+{
+  "name": "raj-quest-migration",
+  "version": "1.0.0",
+  "description": "Migration script for raj.quest",
+  "type": "module",
+  "scripts": {
+    "migrate": "npx ts-node migrate.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.3.0"
+  }
+}

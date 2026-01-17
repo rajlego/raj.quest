@@ -1,0 +1,59 @@
+name = "raj-quest"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# =============================================================================
+# KV Namespaces Setup
+# =============================================================================
+# To create the KV namespace, run:
+#   npx wrangler kv:namespace create REDIRECTS
+#
+# Copy the id value and replace REPLACE_WITH_YOUR_NAMESPACE_ID below.
+#
+# For preview/local development, also run:
+#   npx wrangler kv:namespace create REDIRECTS --preview
+# =============================================================================
+
+[[kv_namespaces]]
+binding = "REDIRECTS"
+id = "e22541654a3b42fe95703b5dc6ba4edd"
+preview_id = "88d9608f7cac4e989a45362cf96c44dc"
+
+# =============================================================================
+# Environment Variables
+# =============================================================================
+# ALLOWED_ADMIN_EMAILS: Comma-separated list of emails that can access /admin
+# If not set, any authenticated user can access admin
+# =============================================================================
+
+[vars]
+ENVIRONMENT = "production"
+# ALLOWED_ADMIN_EMAILS = "you@gmail.com"
+
+# =============================================================================
+# Cloudflare Access Setup (for /admin protection)
+# =============================================================================
+# 1. Go to Cloudflare Zero Trust dashboard:
+#    https://one.dash.cloudflare.com/
+#
+# 2. Navigate to: Access > Applications > Add an application
+#
+# 3. Select "Self-hosted" and configure:
+#    - Application name: raj.quest Admin
+#    - Session duration: 24 hours (or your preference)
+#    - Application domain: raj.quest
+#    - Path: /admin*
+#
+# 4. Add a policy:
+#    - Policy name: Allow Google Login
+#    - Action: Allow
+#    - Include: Login Methods > Google
+#    - (Optional) Include: Emails > your@email.com
+#
+# 5. Configure identity providers:
+#    Settings > Authentication > Login methods > Add Google
+#    Follow the OAuth setup instructions
+#
+# After setup, visiting /admin will redirect to Google login first.
+# =============================================================================

@@ -68,3 +68,7 @@ db/
 
 # Local Netlify folder
 .netlify
+
+# Cloudflare Workers
+.wrangler/
+.dev.vars

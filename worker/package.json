@@ -1,0 +1,19 @@
+{
+  "name": "raj-quest-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for raj.quest URL redirect service",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240117.0",
+    "typescript": "^5.3.0",
+    "wrangler": "^3.24.0"
+  }
+}
