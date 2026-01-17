@@ -354,7 +354,13 @@ export async function handleUnlock(
 /**
  * Handle home page
  */
-export async function handleHome(request: Request): Promise<Response> {
+export async function handleHome(request: Request, env: Env): Promise<Response> {
+  // Check for root redirect in KV
+  const rootRecord = await getRecord(env.REDIRECTS, '_root');
+  if (rootRecord && rootRecord.type === 'uri') {
+    return Response.redirect(rootRecord.content, 302);
+  }
+
   // Check for curl user agent
   const userAgent = request.headers.get('User-Agent') || '';
 

@@ -24,7 +24,7 @@ export default {
 
       // Home page
       if (path === '/' || path === '') {
-        response = await handleHome(request);
+        response = await handleHome(request, env);
         return addSecurityHeaders(response);
       }
 
