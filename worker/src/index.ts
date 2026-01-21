@@ -17,9 +17,9 @@ import type { Env } from './storage';
 function getSubdomain(hostname: string): string | null {
   const parts = hostname.split('.');
 
-  // Handle workers.dev (base is x.workers.dev = 3 parts)
+  // Handle workers.dev (base is worker.account.workers.dev = 4 parts)
   if (hostname.endsWith('.workers.dev')) {
-    return parts.length > 3 ? parts.slice(0, -3).join('.') : null;
+    return parts.length > 4 ? parts.slice(0, -4).join('.') : null;
   }
 
   // Handle custom domains like raj.quest (base is 2 parts)
