@@ -142,7 +142,7 @@ export function addSecurityHeaders(response: Response): Response {
   headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';"
   );
 
   return new Response(response.body, {

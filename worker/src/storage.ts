@@ -8,6 +8,7 @@ export interface StoredRecord {
   passwordHash?: string;
   createdAt?: string;
   updatedAt?: string;
+  lineTimestamps?: string[];  // Per-line edit timestamps for notes
 }
 
 export interface Env {
@@ -86,19 +87,30 @@ export async function listAllRecords(
 ): Promise<Map<string, StoredRecord>> {
   const records = new Map<string, StoredRecord>();
   let cursor: string | undefined;
+  const allKeys: string[] = [];
 
+  // First: collect all keys
   do {
     const result = await kv.list({ cursor });
     for (const key of result.keys) {
       if (!isSystemKey(key.name)) {
-        const record = await getRecord(kv, key.name);
-        if (record) {
-          records.set(key.name, record);
-        }
+        allKeys.push(key.name);
       }
     }
     cursor = result.list_complete ? undefined : result.cursor;
   } while (cursor);
+
+  // Then: fetch all records in parallel
+  const results = await Promise.all(
+    allKeys.map(async (key) => {
+      const record = await getRecord(kv, key);
+      return { key, record };
+    })
+  );
+
+  for (const { key, record } of results) {
+    if (record) records.set(key, record);
+  }
 
   return records;
 }
@@ -272,4 +284,70 @@ export function isValidUrl(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Update line timestamps using content-based diffing
+ * Handles insertions/deletions correctly by matching line content
+ */
+export function updateLineTimestamps(
+  oldContent: string,
+  newContent: string,
+  oldTimestamps: string[] = []
+): string[] {
+  const oldLines = oldContent.split('\n');
+  const newLines = newContent.split('\n');
+  const now = new Date().toISOString();
+
+  // Build map of old line content -> [indices, timestamps]
+  const oldLineMap = new Map<string, { idx: number; ts: string }[]>();
+  oldLines.forEach((line, i) => {
+    if (!oldLineMap.has(line)) oldLineMap.set(line, []);
+    oldLineMap.get(line)!.push({ idx: i, ts: oldTimestamps[i] || now });
+  });
+
+  // For each new line, find matching old line (prefer same position)
+  const newTimestamps: string[] = [];
+  const usedOldIndices = new Set<number>();
+
+  for (let i = 0; i < newLines.length; i++) {
+    const line = newLines[i];
+    const matches = oldLineMap.get(line) || [];
+
+    // Find unused match, prefer same index
+    let match = matches.find(m => m.idx === i && !usedOldIndices.has(m.idx));
+    if (!match) match = matches.find(m => !usedOldIndices.has(m.idx));
+
+    if (match) {
+      newTimestamps.push(match.ts);
+      usedOldIndices.add(match.idx);
+    } else {
+      newTimestamps.push(now); // New or modified line
+    }
+  }
+
+  return newTimestamps;
+}
+
+/**
+ * Format a timestamp as relative time (e.g., "2h ago", "Jan 15")
+ */
+export function formatRelativeTime(isoTimestamp: string): string {
+  const date = new Date(isoTimestamp);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffMin < 1) return 'now';
+  if (diffMin < 60) return `${diffMin}m`;
+  if (diffHour < 24) return `${diffHour}h`;
+  if (diffDay < 7) return `${diffDay}d`;
+
+  // Show date for older
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[date.getMonth()]} ${date.getDate()}`;
 }
